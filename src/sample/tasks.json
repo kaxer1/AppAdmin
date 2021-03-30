@@ -1,0 +1,26 @@
+[
+    {
+        "id": 0,
+        "title": "task uno",
+        "description": "lorem ipsum",
+        "done": false
+    },
+    {
+        "id": 1,
+        "title": "task dos",
+        "description": "lorem ipsum",
+        "done": true
+    },
+    {
+        "id": 2,
+        "title": "task tres",
+        "description": "lorem ipsum",
+        "done": false
+    },
+    {
+        "id": 3,
+        "title": "task cuatro",
+        "description": "lorem ipsum",
+        "done": false
+    }
+]
