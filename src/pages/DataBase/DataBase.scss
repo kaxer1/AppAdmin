@@ -1,1 +1,15 @@
 @import '../../scss/index.scss';
+
+p.title {
+    font-size: 25px;
+    padding-top: 12px;
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+
+    button {
+        margin: 0px auto;
+    }
+}

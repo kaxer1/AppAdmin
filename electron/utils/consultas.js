@@ -17,13 +17,28 @@ const usuariosDataBase = async () => {
     })
 }
 
-const tablasDatabase = async(database) => {
+function Credenciales(database) {
     const credenciales = fs.readFileSync('bdd.conf.json','utf8');
     const [ obj ] = JSON.parse(credenciales)
     obj.database = database;
-    const newPool = new Pool(obj);
+    return new Pool(obj)
+}
+
+const tablasDatabase = async(database) => {
+    
+    const newPool = Credenciales(database);
     const query = `SELECT table_name FROM information_schema.tables 
     WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\' ORDER BY table_name`
+    return await newPool.query(query).then(result => {
+        return result.rows;
+    })
+}
+
+const informacionTabla = async(database, name_table) => {
+    
+    const newPool = Credenciales(database);
+    const query = `SELECT column_name, data_type, is_nullable 
+        FROM information_schema.columns WHERE table_name = \'${name_table}\' `
     return await newPool.query(query).then(result => {
         return result.rows;
     })
@@ -33,5 +48,6 @@ const tablasDatabase = async(database) => {
 module.exports = {
     listaBDD,
     usuariosDataBase,
-    tablasDatabase
+    tablasDatabase,
+    informacionTabla
 }

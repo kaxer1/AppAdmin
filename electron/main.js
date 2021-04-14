@@ -75,6 +75,10 @@ ipcMain.on("ApiResquest", async (event, args) => {
       response = await consultas.tablasDatabase(args.namedb);
       mainWindow.webContents.send("tablasDatabase", response);
       break;
+    case 'informacionTabla':
+      response = await consultas.informacionTabla(args.namedb);
+      mainWindow.webContents.send("informacionTabla", response);
+      break;
     default:
       response = { error: 'Error en la consulta.'}
       mainWindow.webContents.send("error", response);

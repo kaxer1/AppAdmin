@@ -1,1 +1,15 @@
 @import '../../scss/index.scss';
+
+
+p.title {
+    font-size: 25px;
+    padding-top: 12px;
+    a.btn-link {
+        padding: 0px 8px;
+        margin-right: 8px;
+    }
+
+    .bdd_name {
+        color: $primary-color;
+    }
+}

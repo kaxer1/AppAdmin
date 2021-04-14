@@ -1,0 +1,38 @@
+@import '../../scss/index.scss'; 
+
+.cards {
+    background-color: #fff;
+    padding: 1px;
+
+    &__titulo {
+        font-size: 18px;
+        margin-left: 10px;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+    
+    &__size {
+        font-size: 15px;
+        margin-left: 10px;
+        text-transform: capitalize;
+    }
+
+    &__btn-link {
+        display: flex;
+        margin: 10px;
+        border-radius: 25px;
+        border: 2px solid transparent;
+        color: $font-light;
+        font-size: 18px;
+        background-color: $background-primary;
+
+        .text {
+            margin: auto 5px auto 25%;
+            text-align: center;
+        }
+    }
+}
+
+a.cards__btn-link {
+    text-decoration: none;
+}

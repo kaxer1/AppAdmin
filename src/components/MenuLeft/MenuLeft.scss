@@ -1,5 +1,16 @@
 @import '../../scss/index.scss';
 
+.content {
+    background-color: $background-menu;
+    height: 100%;
+    margin-right: 10px;
+
+    img {
+        margin: 15px 10px 25px 10px;
+        width: 90%;
+    }
+}
+
 a.btn-menu {
     display: flex;
     margin: 2px;
@@ -8,10 +19,18 @@ a.btn-menu {
     color: $font-dark;
     font-size: 18px;
     text-decoration: none;
+
+    svg {
+        margin-right: 10px;
+    }
+
+    // p.item-menu  {
+    //     margin-top: 2px;
+    // }
 }
 
 
-a:hover,.active {
+a.btn-menu:hover,.active {
     background-color: $background-grey;
     transition: 100ms;
     border-radius: 25px;
