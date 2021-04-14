@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react';
+import './Home.scss';
 
-export default class Home extends Component() {
-    render() {
-        return (
-            <div>
-                <h1>HOME INICIAL</h1>
-            </div>
-        )
-    }
+export default function Home() {
+    return (
+        <div>
+            <h1>Hola mundo</h1>
+        </div>
+    )
 }

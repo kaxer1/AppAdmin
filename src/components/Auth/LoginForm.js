@@ -23,20 +23,16 @@ export default class LoginForm extends Component {
 
     render() {
         return (
-            <form onSubmit={this.onSubmit}  noValidate autoComplete="off" >
-                <TextField id="outlined-full-width" label="Usuario" variant="outlined" fullWidth
-          margin="normal"
+            <form onSubmit={this.onSubmit} onChange={this.onChange} noValidate autoComplete="off" >
+                <TextField id="outlined-full-width" label="Usuario" variant="outlined" fullWidth margin="normal"
                     type="text" 
                     name="username"
-                    onChange={this.onChange} 
                     value={this.state.username} />
-                <TextField id="outlined-full-width" label="Contraseña" variant="outlined" fullWidth
-          margin="normal"
+                <TextField id="outlined-full-width" label="Contraseña" variant="outlined" fullWidth margin="normal"
                     type="password" 
                     name="password"
-                    onChange={this.onChange} 
                     value={this.state.password} />
-                <Button id="btn" variant="contained" color="primary"> INGRESAR </Button>
+                <Button type="submit" id="btn" variant="contained" color="primary"> INGRESAR </Button>
             </form>
         )
     }

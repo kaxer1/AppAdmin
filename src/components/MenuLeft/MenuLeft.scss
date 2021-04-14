@@ -1,0 +1,18 @@
+@import '../../scss/index.scss';
+
+a.btn-menu {
+    display: flex;
+    margin: 2px;
+    padding: 5px 45px 5px 20px;
+    border: 2px solid transparent;
+    color: $font-dark;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+
+a:hover,.active {
+    background-color: $background-grey;
+    transition: 100ms;
+    border-radius: 25px;
+}
