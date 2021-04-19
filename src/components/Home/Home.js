@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 import './Home.scss';
 
@@ -19,7 +18,6 @@ export default function Home(props) {
                     <Link to="/table" className="cards__btn-link"
                         onClick={(e) => handlerOpenTables(obj.datname)}>
                             <p className="text"> Abrir </p>
-                            <OpenInNewIcon />
                     </Link>
                 </Paper>
             </Grid>

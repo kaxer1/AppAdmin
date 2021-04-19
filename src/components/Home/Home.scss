@@ -27,8 +27,9 @@
         background-color: $background-primary;
 
         .text {
-            margin: auto 5px auto 25%;
+            margin: auto;
             text-align: center;
+            padding: 5px 0px;
         }
     }
 }
