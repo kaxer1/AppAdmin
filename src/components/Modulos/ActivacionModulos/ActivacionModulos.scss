@@ -1,0 +1,24 @@
+@import "../../../scss/index.scss";
+
+.modulos {
+    margin: 15px;
+
+    form {
+        
+        .MuiFormControlLabel-root {
+            display: block;
+            width: 100%;
+        }
+
+        .btn-content {
+            width: 100%;
+            button.btn-save {
+                margin: 15px 30%;
+            }
+        }
+    }
+
+    &__empre {
+        margin: 15px;
+    }
+}

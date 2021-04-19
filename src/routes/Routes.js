@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 // Pages
 import Home from "../pages/Home";
 import DataBase from "../pages/DataBase";
-import Table from "../pages/Table";
+import AdminDB from "../pages/AdminDB";
 
 export default function Routes() {
 
@@ -44,8 +44,8 @@ export default function Routes() {
             <Route path="/settings" exact>
                 <h1>Configuracion de cuenta</h1>
             </Route>
-            <Route path="/table" exact>
-                <Table dataTableList={dataTableList} titleDBB={titleDBB} />
+            <Route path="/adminDB" exact>
+                <AdminDB dataTableList={dataTableList} titleDBB={titleDBB} />
             </Route>
         </Switch>
     )

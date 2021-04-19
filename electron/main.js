@@ -79,6 +79,22 @@ ipcMain.on("ApiResquest", async (event, args) => {
       response = await consultas.informacionTabla(args.namedb);
       mainWindow.webContents.send("informacionTabla", response);
       break;
+    case 'getfuncionesModulos':
+      response = await consultas.getfuncionesModulos(args.namedb);
+      mainWindow.webContents.send("getfuncionesModulos", response);
+      break;
+    case 'putfuncionesModulos':
+      response = await consultas.putfuncionesModulos(args.namedb, args.data);
+      mainWindow.webContents.send("putfuncionesModulos", response);
+      break;
+    case 'getEmpresaInfo':
+      response = await consultas.getEmpresaInfo(args.namedb);
+      mainWindow.webContents.send("getEmpresaInfo", response);
+      break;
+    case 'getUsersApp':
+      response = await consultas.getUsersApp(args.namedb);
+      mainWindow.webContents.send("getUsersApp", response);
+      break;
     default:
       response = { error: 'Error en la consulta.'}
       mainWindow.webContents.send("error", response);

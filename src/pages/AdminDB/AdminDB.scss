@@ -13,3 +13,12 @@ p.title {
         color: $primary-color;
     }
 }
+
+.admin_page {
+    background: #fff;
+    margin-top: 15px;
+    
+    &__content {
+        margin: 10px;
+    }
+}
