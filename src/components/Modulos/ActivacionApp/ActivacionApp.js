@@ -1,5 +1,4 @@
-// import React, { useState, useEffect } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,6 +9,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TableHead from '@material-ui/core/TableHead';
+import { toast } from 'react-toastify';
 
 import TablePag from '../../Table/TablePaginationActions';
 
@@ -20,7 +20,29 @@ const useStyles2 = makeStyles({
 });
 
 export default function ActivacionApp(props) {
-    const { userEmploys: rows } = props;
+    const { dataname } = props;
+
+    const [rows, setUserEmploys] = useState([]);
+
+    useEffect(() => {
+        getUsersApp();
+        return () => {
+            setUserEmploys([])
+        }
+    }, [])
+
+    const getUsersApp = () => {
+        window.api.send("Api/getUsersApp", { namedb: dataname });
+        window.api.receive("getUsersApp", (data) => {
+            console.log(data);
+            if (data.err) {
+                toast.error('Reloj Virtual: ' + data.err)
+                setUserEmploys([])
+            } else {
+                setUserEmploys(data)
+            }
+        });
+    }
 
     const classes = useStyles2();
     const [page, setPage] = useState(0);
@@ -36,7 +58,8 @@ export default function ActivacionApp(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    return (
+
+    const renderTable = (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="custom pagination table">
                 <TableHead>
@@ -98,5 +121,16 @@ export default function ActivacionApp(props) {
                 </TableFooter>
             </Table>
         </TableContainer>
+    )
+
+    const handlerError = () => {
+        return <h1>No hay registros de usuarios</h1>
+    }
+
+
+    return (
+        <>
+            {rows.length > 0 ? renderTable : handlerError()}
+        </>
     )
 }

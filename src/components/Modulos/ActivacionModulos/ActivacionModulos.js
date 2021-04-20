@@ -7,26 +7,33 @@ import SaveIcon from '@material-ui/icons/Save';
 import { toast } from 'react-toastify';
 
 import './ActivacionModulos.scss';
-import EmpresaInfo from './EmpresaInfo';
 import Grid from '@material-ui/core/Grid';
 
 export default function ActivacionModulos(props) {
 
     const { dataname } = props;
 
-    const [modulos, setModulos] = useState({
-        hora_extra: false,
-        accion_personal: false,
-        alimentacion: false,
-        permisos: false,
-    })
+    const [modulos, setModulos] = useState(null)
 
     useEffect(() => {
-        window.api.send("ApiResquest", { funcion: "getfuncionesModulos", namedb: dataname });
-        window.api.receive("getfuncionesModulos", (data) => {
-            setModulos(data)
-        });
+        getfuncionesModulos()
+        return () => {
+            setModulos(null)
+        }
     }, [])
+
+    const getfuncionesModulos = () => {
+        window.api.send("Api/getfuncionesModulos", { namedb: dataname });
+        window.api.receive("getfuncionesModulos", (data) => {
+            console.log(data);
+            if (data.err) {
+                toast.error('Activacion Modulos: ' + data.err)
+                setModulos(null)
+            } else {
+                setModulos(data)
+            }
+        });
+    }
 
     const handleChange = (event) => {
         setModulos({ ...modulos, [event.target.name]: event.target.checked });
@@ -34,82 +41,92 @@ export default function ActivacionModulos(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        window.api.send("ApiResquest", { funcion: "putfuncionesModulos", namedb: dataname, data: modulos });
+        window.api.send("Api/putfuncionesModulos", { namedb: dataname, data: modulos });
         window.api.receive("putfuncionesModulos", (data) => {
             setModulos(data)
             toast.success('Modulos Actualizados')
         });
     }
 
-    const renderForm = (
-        <form onSubmit={onSubmit}>
-            <FormGroup row>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={modulos.hora_extra}
-                            onChange={handleChange}
-                            name="hora_extra"
-                            color="primary" />}
-                    label="Horas Extras"
-                />
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={modulos.accion_personal}
-                            onChange={handleChange}
-                            name="accion_personal"
-                            color="primary" />}
-                    label="Acciones de personal"
-                />
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={modulos.alimentacion}
-                            onChange={handleChange}
-                            name="alimentacion"
-                            color="primary" />}
-                    label="Alimentacion"
-                />
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={modulos.permisos}
-                            onChange={handleChange}
-                            name="permisos"
-                            color="primary" />}
-                    label="Permisos"
-                />
-            </FormGroup>
-            <div className="btn-content">
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="secondary"
-                    size="large"
-                    className="btn-save"
-                    endIcon={<SaveIcon />}
-                >Guardar</Button>
-            </div>
-        </form>
-    )
+    const renderForm = () => {
+        const { hora_extra, accion_personal, alimentacion, permisos } = modulos;
+        return (
+            <form onSubmit={onSubmit}>
+                <FormGroup row>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={hora_extra}
+                                onChange={handleChange}
+                                name="hora_extra"
+                                color="primary" />}
+                        label="Horas Extras"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={accion_personal}
+                                onChange={handleChange}
+                                name="accion_personal"
+                                color="primary" />}
+                        label="Acciones de personal"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={alimentacion}
+                                onChange={handleChange}
+                                name="alimentacion"
+                                color="primary" />}
+                        label="Alimentacion"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={permisos}
+                                onChange={handleChange}
+                                name="permisos"
+                                color="primary" />}
+                        label="Permisos"
+                    />
+                </FormGroup>
+                <div className="btn-content">
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="secondary"
+                        size="large"
+                        className="btn-save"
+                        endIcon={<SaveIcon />}
+                    >Guardar</Button>
+                </div>
+            </form>
+        )
+    }
 
-    const handlerComparacion = () => {
-        toast.error(modulos.err)
+    const handlerError = () => {
+        return (
+            <h1>No existe la tabla de Funcionalidades</h1>
+        )
+    }
+
+    const renderGrid = () => {
+        return (
+            <Grid container alignItems="center" >
+                <Grid item sm={12} md={6}>
+                    <h4>Habilita o Deshabilita módulos</h4>
+                    {renderForm()}
+                </Grid>
+                <Grid item sm={12} md={6}>
+                    <h1>Hola</h1>
+                </Grid>
+            </Grid>
+        )
     }
 
     return (
         <div className="modulos">
-            <Grid container alignItems="center" >
-                <Grid item sm={12} md={6}>
-                    <h4>Habilita o Deshabilita módulos</h4>
-                    {modulos.err ? handlerComparacion() : renderForm}
-                </Grid>
-                <Grid item sm={12} md={6}>
-                    <h4>Información Empresa</h4>
-                    <EmpresaInfo dataname={dataname} />
-                </Grid>
-            </Grid>
+            {modulos ? renderGrid() : handlerError()}
         </div>
     )
 }

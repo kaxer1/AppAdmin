@@ -14,7 +14,7 @@ export default function DataBase() {
     const [dataConnect, setdataConnect] = useState([])
 
     useEffect(() => {
-        window.api.send("ArchivoConf", { data: { accion: "read_update"} });
+        window.api.send("fileConf/read_update");
         window.api.receive("read_update", (data) => {
             console.log(JSON.parse(data));
             setdataConnect(JSON.parse(data))
@@ -26,7 +26,7 @@ export default function DataBase() {
     };
 
     const handlerSaveConnect = (data) => {
-        window.api.send("ArchivoConf", { data: { accion: "update", data: JSON.stringify([data]) } });
+        window.api.send("fileConf/update", { data: JSON.stringify([data]) });
         window.api.receive("update", (data) => {
             console.log(data);
             setActiveForm(false)

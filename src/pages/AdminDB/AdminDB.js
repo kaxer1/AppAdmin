@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 
 import TableInfo from '../../components/Table/TableInfo';
 import ActivacionApp from '../../components/Modulos/ActivacionApp';
 import ActivacionModulos from '../../components/Modulos/ActivacionModulos';
+import Empresa from '../../components/Empresa';
 import './AdminDB.scss';
 
 function TabPanel(props) {
@@ -21,13 +21,13 @@ function TabPanel(props) {
         <div className="admin_page"
             role="tabpanel"
             hidden={value !== index}
-            id={`full-width-tabpanel-${index}`}
-            aria-labelledby={`full-width-tab-${index}`}
+            id={`scrollable-auto-tabpanel-${index}`}
+            aria-labelledby={`scrollable-auto-tab-${index}`}
             {...other}
         >
             {value === index && (
                 <Box className="admin_page__content">
-                    { children }
+                    {children}
                 </Box>
             )}
         </div>
@@ -42,8 +42,8 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
     return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        id: `scrollable-auto-tab-${index}`,
+        'aria-controls': `scrollable-auto-tabpanel-${index}`,
     };
 }
 
@@ -51,7 +51,7 @@ export default function AdminDB(props) {
 
     const { dataTableList: rows, titleDBB } = props;
 
-    const [value, setValue] = React.useState(2);
+    const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -60,16 +60,6 @@ export default function AdminDB(props) {
     const handleChangeIndex = (index) => {
         setValue(index);
     };
-
-    const [userEmploys, setUserEmploys] = useState([])
-
-    useEffect(() => {
-        window.api.send("ApiResquest", { funcion: "getUsersApp", namedb: titleDBB });
-        window.api.receive("getUsersApp", (data) => {
-            console.log(data);
-            setUserEmploys(data)
-        });
-    }, [])
 
     return (
         <>
@@ -83,15 +73,17 @@ export default function AdminDB(props) {
             <AppBar position="static" color="default">
                 <Tabs
                     value={value}
+                    onChange={handleChange}
                     indicatorColor="primary"
                     textColor="primary"
-                    onChange={handleChange}
-                    variant="fullWidth"
-                    aria-label="disabled tabs example"
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    aria-label="scrollable auto tabs example"
                 >
-                    <Tab label="Modulos" {...a11yProps(0)} />
-                    <Tab label="Reloj virtual" {...a11yProps(1)} />
-                    <Tab label="Tablas" {...a11yProps(2)} />
+                    <Tab label="Empresa" {...a11yProps(0)} />
+                    <Tab label="Modulos" {...a11yProps(1)} />
+                    <Tab label="Reloj virtual" {...a11yProps(2)} />
+                    <Tab label="Tablas" {...a11yProps(3)} />
                 </Tabs>
             </AppBar>
             <SwipeableViews
@@ -99,12 +91,15 @@ export default function AdminDB(props) {
                 onChangeIndex={handleChangeIndex}
             >
                 <TabPanel value={value} index={0}>
-                    <ActivacionModulos dataname={titleDBB} />
+                    <Empresa dataname={titleDBB} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <ActivacionApp userEmploys={userEmploys} />
+                    <ActivacionModulos dataname={titleDBB} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
+                    <ActivacionApp dataname={titleDBB} />
+                </TabPanel>
+                <TabPanel value={value} index={3}>
                     <TableInfo rows={rows} />
                 </TabPanel>
             </SwipeableViews>

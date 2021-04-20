@@ -9,7 +9,7 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200, 
+    width: 1200,
     height: 900,
     webPreferences: {
       contextIsolation: true,
@@ -26,81 +26,91 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
     // mainWindow.webContents.send();
   }
+  mainWindow.webContents.setMaxListeners(1);
   mainWindow.on('closed', () => mainWindow = null);
+
 }
 
-ipcMain.on("ArchivoConf", async (event, args) => {
-  console.log(args);
-  const {accion , data} = args.data
-  let response;
-  switch (accion) {
+/**
+  * 
+  * EVENTOS MANEJO DE ARCHIVOS DEL SISTEMA
+  * 
+  */
 
-    case 'read_update':
-      fs.readFile('bdd.conf.json', 'utf8', (error, data) => {
-        if(error) throw error;
-        mainWindow.webContents.send("read_update", data);
-      });
-      break;
+ipcMain.on("fileConf/read_update", async (event, args) => {
+  fs.readFile('bdd.conf.json', 'utf8', (error, data) => {
+    if (error) throw error;
+    mainWindow.webContents.send("read_update", data);
+  });
 
-    case 'update':
-      console.log(data);
-      fs.writeFile('bdd.conf.json', data, function (err) {
-        if (err) throw err;
-        mainWindow.webContents.send("update", data);
-        console.log('******************************', 'Archivo  actualizado!', '******************************');
-      })
-      break;
-
-    default:
-      response = { error: 'Error en la consulta.'}
-      mainWindow.webContents.send("error", response);
-      break;
-  }
-  
 });
 
-ipcMain.on("ApiResquest", async (event, args) => {
+ipcMain.on("fileConf/update", async (event, args) => {
   console.log(args);
-  let response;
-  switch (args.funcion) {
-    case 'listaBDD':
-      response = await consultas.listaBDD();
-      mainWindow.webContents.send("listaBDD", response);
-      break;
-    case 'usuariosDataBase':
-      response = await consultas.usuariosDataBase();
-      mainWindow.webContents.send("usuariosDataBase", response);
-      break;
-    case 'tablasDatabase':
-      response = await consultas.tablasDatabase(args.namedb);
-      mainWindow.webContents.send("tablasDatabase", response);
-      break;
-    case 'informacionTabla':
-      response = await consultas.informacionTabla(args.namedb);
-      mainWindow.webContents.send("informacionTabla", response);
-      break;
-    case 'getfuncionesModulos':
-      response = await consultas.getfuncionesModulos(args.namedb);
-      mainWindow.webContents.send("getfuncionesModulos", response);
-      break;
-    case 'putfuncionesModulos':
-      response = await consultas.putfuncionesModulos(args.namedb, args.data);
-      mainWindow.webContents.send("putfuncionesModulos", response);
-      break;
-    case 'getEmpresaInfo':
-      response = await consultas.getEmpresaInfo(args.namedb);
-      mainWindow.webContents.send("getEmpresaInfo", response);
-      break;
-    case 'getUsersApp':
-      response = await consultas.getUsersApp(args.namedb);
-      mainWindow.webContents.send("getUsersApp", response);
-      break;
-    default:
-      response = { error: 'Error en la consulta.'}
-      mainWindow.webContents.send("error", response);
-      break;
-  }
+  fs.writeFile('bdd.conf.json', args, function (err) {
+    if (err) throw err;
+    mainWindow.webContents.send("update", data);
+    console.log('******************************', 'Archivo  actualizado!', '******************************');
+  })
+
 });
+
+/**
+  * 
+  * EVENTOS CONSULTAS API
+  * 
+  */
+
+ipcMain.on("Api/listaBDD", async (event, args) => {
+  console.log(args);
+  let response = await consultas.listaBDD();
+  mainWindow.webContents.send("listaBDD", response);
+});
+
+ipcMain.on("Api/usuariosDataBase", async (event, args) => {
+  let response = await consultas.usuariosDataBase();
+  mainWindow.webContents.send("usuariosDataBase", response);
+});
+
+ipcMain.on("Api/tablasDatabase", async (event, args) => {
+  let response = await consultas.tablasDatabase(args.namedb);
+  mainWindow.webContents.send("tablasDatabase", response);
+});
+
+ipcMain.on("Api/informacionTabla", async (event, args) => {
+  let response = await consultas.informacionTabla(args.namedb);
+  mainWindow.webContents.send("informacionTabla", response);
+});
+
+ipcMain.on("Api/getfuncionesModulos", async (event, args) => {
+  let response = await consultas.getfuncionesModulos(args.namedb);
+  mainWindow.webContents.send("getfuncionesModulos", response);
+});
+
+ipcMain.on("Api/putfuncionesModulos", async (event, args) => {
+  let response = await consultas.putfuncionesModulos(args.namedb, args.data);
+  mainWindow.webContents.send("putfuncionesModulos", response);
+});
+
+ipcMain.on("Api/getEmpresaInfo", async (event, args) => {
+  let response = await consultas.getEmpresaInfo(args.namedb);
+  mainWindow.webContents.send("getEmpresaInfo", response);
+  ipcMain.setMaxListeners(1)
+});
+
+ipcMain.on("Api/getUsersApp", async (event, args) => {
+  let response = await consultas.getUsersApp(args.namedb);
+  mainWindow.webContents.send("getUsersApp", response);
+});
+
+ipcMain.on("Api/jsonDataEmpresa", async (event, args) => {
+  let response = await consultas.jsonDataEmpresa(args.namedb);
+  mainWindow.webContents.send("jsonDataEmpresa", response);
+});
+
+// ipcMain.on("Api/", async (event, args) => {
+//   console.log(args);
+// });
 
 
 module.exports = {
