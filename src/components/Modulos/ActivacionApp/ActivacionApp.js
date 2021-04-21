@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,9 +10,11 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TableHead from '@material-ui/core/TableHead';
+import OpenWithIcon from '@material-ui/icons/OpenWith';
 import { toast } from 'react-toastify';
 
 import TablePag from '../../Table/TablePaginationActions';
+import DialogApp from '../../Dialog/DialogApp';
 
 const useStyles2 = makeStyles({
     table: {
@@ -20,6 +23,7 @@ const useStyles2 = makeStyles({
 });
 
 export default function ActivacionApp(props) {
+    const classes = useStyles2();
     const { dataname } = props;
 
     const [rows, setUserEmploys] = useState([]);
@@ -44,10 +48,9 @@ export default function ActivacionApp(props) {
         });
     }
 
-    const classes = useStyles2();
+    /***************************************************************************************/
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
     const handleChangePage = (event, newPage) => {
@@ -58,6 +61,47 @@ export default function ActivacionApp(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    /***************************************************************************************/
+    const [open, setOpen] = useState(false);
+    const [userSelectChange, setUserSelectChange] = useState(null)
+
+    const openDialogApp = (empleado) => {
+        setOpen(true);
+        setUserSelectChange(empleado);
+    }
+    const closeDialogApp = (value) => {
+        if (value !== null) {
+            setOpen(false);
+            handlerSave(value)
+        }
+        setUserSelectChange(null)
+    };
+    /***************************************************************************************/
+    const handlerSave = (value) => {
+        const { id_user, fullname } = userSelectChange;
+
+        window.api.send("Api/putUserApp", { namedb: dataname, data: {value, id_user} });
+        window.api.receive("putUserApp", (data) => {
+            if (data.err) {
+                toast.error(data.err)
+            } else {
+                const [ obj ] = data
+                const nuevo = rows.map(o => {
+                    if (o.id_user === id_user) {
+                        o.app_habilita = obj.app_habilita
+                    }
+                    return o
+                })
+
+                if (obj.app_habilita) {
+                    toast.success(`${fullname} habilitado para usar reloj virtual`)
+                } else {
+                    toast.warn(`${fullname} deshabilitado para usar reloj virtual`)
+                }
+                setUserEmploys(nuevo)
+            }
+        });
+    }
 
     const renderTable = (
         <TableContainer component={Paper}>
@@ -69,6 +113,7 @@ export default function ActivacionApp(props) {
                         <TableCell align="right">Cédula</TableCell>
                         <TableCell align="right">Código</TableCell>
                         <TableCell align="right">App</TableCell>
+                        <TableCell />
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -91,6 +136,16 @@ export default function ActivacionApp(props) {
                             </TableCell>
                             <TableCell component="th" scope="row" align="right">
                                 {row.app_habilita ? 'Si' : 'No'}
+                            </TableCell>
+                            <TableCell>
+                                <IconButton aria-label="expand row" size="small" onClick={() => openDialogApp(row)}>
+                                    <OpenWithIcon />
+                                </IconButton>
+                                {open && <DialogApp
+                                    open={open}
+                                    closeDialogApp={closeDialogApp}
+                                    empleado={userSelectChange} />
+                                }
                             </TableCell>
                         </TableRow>
                     ))}
@@ -126,7 +181,6 @@ export default function ActivacionApp(props) {
     const handlerError = () => {
         return <h1>No hay registros de usuarios</h1>
     }
-
 
     return (
         <>

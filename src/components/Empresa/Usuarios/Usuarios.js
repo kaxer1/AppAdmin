@@ -13,23 +13,20 @@ const useStyles = makeStyles({
     },
 });
 
-export default function EmpresaInfo(props) {
-    const { empresa: { nombre, ruc, direccion, telefono, correo, representante, tipo_empresa } } = props;
+
+export default function Usuarios(props) {
+    const { usuarios: { activos, inactivos, total } } = props
     const classes = useStyles();
     return (
         <Card className={classes.root}>
             <CardContent>
                 <Typography className={classes.pos} variant="h5" component="h2">
-                    Información Empresa
+                    Usuarios
                 </Typography>
                 <Typography variant="body2" component="p">
-                    <b>Empresa:</b> {nombre} <br />
-                    <b>Ruc:</b> {ruc} <br />
-                    <b>Direccion:</b> {direccion} <br />
-                    <b>Telefono:</b> {telefono} <br />
-                    <b>Correo:</b> {correo} <br />
-                    <b>Representante:</b> {representante} <br />
-                    <b>Entidad:</b> {tipo_empresa} <br />
+                    <b>Activos:</b> {activos} <br />
+                    <b>Inactivos:</b> {inactivos} <br />
+                    <b>Total:</b> {total} <br />
                 </Typography>
             </CardContent>
         </Card>

@@ -7,6 +7,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import TableHead from '@material-ui/core/TableHead';
 import Paper from '@material-ui/core/Paper';
 
 import TablePag from '../TablePaginationActions';
@@ -38,6 +39,13 @@ export default function TableInfo(props) {
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="custom pagination table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Nombre Tabla</TableCell>
+                        <TableCell align="right">Tamaño</TableCell>
+                        <TableCell align="right">Registros</TableCell>
+                    </TableRow>
+                </TableHead>
                 <TableBody>
                     {(rowsPerPage > 0
                         ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -46,6 +54,12 @@ export default function TableInfo(props) {
                         <TableRow key={row.table_name}>
                             <TableCell component="th" scope="row">
                                 {row.table_name}
+                            </TableCell>
+                            <TableCell component="th" scope="row" align="right">
+                                {row.tamanio}
+                            </TableCell>
+                            <TableCell component="th" scope="row" align="right">
+                                {row.registros}
                             </TableCell>
                         </TableRow>
                     ))}

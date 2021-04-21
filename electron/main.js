@@ -92,12 +92,6 @@ ipcMain.on("Api/putfuncionesModulos", async (event, args) => {
   mainWindow.webContents.send("putfuncionesModulos", response);
 });
 
-ipcMain.on("Api/getEmpresaInfo", async (event, args) => {
-  let response = await consultas.getEmpresaInfo(args.namedb);
-  mainWindow.webContents.send("getEmpresaInfo", response);
-  ipcMain.setMaxListeners(1)
-});
-
 ipcMain.on("Api/getUsersApp", async (event, args) => {
   let response = await consultas.getUsersApp(args.namedb);
   mainWindow.webContents.send("getUsersApp", response);
@@ -106,6 +100,11 @@ ipcMain.on("Api/getUsersApp", async (event, args) => {
 ipcMain.on("Api/jsonDataEmpresa", async (event, args) => {
   let response = await consultas.jsonDataEmpresa(args.namedb);
   mainWindow.webContents.send("jsonDataEmpresa", response);
+});
+
+ipcMain.on("Api/putUserApp", async (event, args) => {
+  let response = await consultas.putUserApp(args.namedb, args.data);
+  mainWindow.webContents.send("putUserApp", response);
 });
 
 // ipcMain.on("Api/", async (event, args) => {

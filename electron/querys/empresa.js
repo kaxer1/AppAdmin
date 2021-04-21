@@ -2,8 +2,16 @@ const { Credenciales } = require('../utils/credenciales');
 
 const tablasDatabase = async (database) => {
     const newPool = Credenciales(database);
-    const query = `SELECT table_name FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\' ORDER BY table_name`
-    return await newPool.query(query).then(result => { return result.rows; })
+    const query = `SELECT table_name, (select pg_size_pretty(pg_relation_size( CAST(table_name as text)))) as tamanio 
+    FROM information_schema.tables WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\' ORDER BY table_name`
+    let respuesta = await newPool.query(query).then(result => { return result.rows });
+    if (respuesta.length === 0) return respuesta
+        
+    return await Promise.all(respuesta.map(async(o) => {
+        const queryTable = `SELECT count(*) FROM ${o.table_name}`
+        o.registros = await newPool.query(queryTable).then(result => { return result.rows[0].count})
+        return o
+    }))
 }
 
 const informacionTabla = async (database, name_table) => {
@@ -12,37 +20,7 @@ const informacionTabla = async (database, name_table) => {
     return await newPool.query(query).then(result => { return result.rows; })
 }
 
-const getfuncionesModulos = async (database) => {
-    const newPool = Credenciales(database);
-    try {
-        const [result] = await newPool.query("SELECT * FROM funciones").then(result => { return result.rows; })
-        if (result) return result
-        return { error: "No hay registros en la tabla funcionalidad" }
-    } catch (error) {
-        console.log(error);
-        return { err: error.toString() }
-    }
-}
-
-const putfuncionesModulos = async (database, data) => {
-    const newPool = Credenciales(database);
-    const { id, hora_extra, accion_personal, alimentacion, permisos } = data;
-    try {
-        const [result] = await newPool.query(
-            "UPDATE funciones SET hora_extra = $2, accion_personal = $3, alimentacion = $4, permisos = $5 WHERE id = $1 RETURNING *",
-            [id, hora_extra, accion_personal, alimentacion, permisos])
-            .then(result => { return result.rows; })
-
-        if (result) return result
-        return { error: "Erro en la actualizacion de funcionalidad" }
-    } catch (error) {
-        console.log(error);
-        return { err: error.toString() }
-    }
-}
-
-async function getEmpresaInfo(database) {
-    const newPool = Credenciales(database);
+async function EmpresaInfo(newPool) {
     const query = `SELECT nombre, ruc, direccion, telefono, correo, representante, tipo_empresa FROM cg_empresa`
     try {
         const [result] = await newPool.query(query).then(result => { return result.rows; })
@@ -54,39 +32,17 @@ async function getEmpresaInfo(database) {
     }
 }
 
-const jsonDataEmpresa = async (database) => {
-    const newPool = Credenciales(database);
-
+async function CountEmpleados(newPool) {
     try {
-
-        const dataEmpresa = await getEmpresaInfo(database); 
-
         const [ emp_activos ] = await newPool.query("SELECT CAST(count(*) AS int) FROM empleados WHERE estado = 1")
             .then(result => { return result.rows });
         const [ emp_inactivos ] = await newPool.query("SELECT CAST(count(*) AS int) FROM empleados WHERE estado = 2")
             .then(result => { return result.rows });
 
-        const empleados = {
+        return {
             activos: emp_activos.count,
             inactivos: emp_inactivos.count,
             total: emp_activos.count + emp_inactivos.count,
-        }
-
-        const [ app_user_activos ] = await newPool.query("SELECT CAST(count(*) AS int) FROM usuarios WHERE app_habilita = true")
-            .then(result => { return result.rows });
-        const [ app_user_inactivos ] = await newPool.query("SELECT CAST(count(*) AS int) FROM usuarios WHERE app_habilita = false")
-            .then(result => { return result.rows });
-
-        const usuarios = {
-            activos: app_user_activos.count,
-            inactivos: app_user_inactivos.count,
-            total: app_user_activos.count + app_user_inactivos.count,
-        }
-
-        return {
-            empleados: empleados,
-            usuarios: usuarios,
-            empresa: dataEmpresa
         }
     } catch (error) {
         console.log(error);
@@ -94,15 +50,59 @@ const jsonDataEmpresa = async (database) => {
     }
 }
 
-const getUsersApp = async (database) => {
-    const newPool = Credenciales(database);
+async function CountUsers(newPool) {
     try {
-        const result = await newPool.query("SELECT (e.nombre || \' \' || e.apellido) AS fullname, e.cedula, e.codigo, u.usuario, u.app_habilita, u.id as id_user " +
-            "FROM empleados AS e, usuarios AS u WHERE CAST( e.codigo as int) = u.id_empleado")
-            .then(result => { return result.rows; })
+        const [ app_user_activos ] = await newPool.query("SELECT CAST(count(*) AS int) FROM usuarios WHERE app_habilita = true")
+            .then(result => { return result.rows });
+        const [ app_user_inactivos ] = await newPool.query("SELECT CAST(count(*) AS int) FROM usuarios WHERE app_habilita = false")
+            .then(result => { return result.rows });
 
-        if (result.length === 0) return { error: "No hay registros en las tablas de empleado y usuario" }
-        return result
+        return {
+            activos: app_user_activos.count,
+            inactivos: app_user_inactivos.count,
+            total: app_user_activos.count + app_user_inactivos.count,
+        }
+    } catch (error) {
+        console.log(error);
+        return { err: error.toString() }
+    }
+}
+
+async function SucursalesInfo(newPool) {
+    const query = `SELECT s.id, p.nombre AS provincia, c.descripcion AS ciudad, s.nombre AS sucursal
+        FROM sucursales AS s, ciudades AS c, cg_provincias AS p
+        WHERE s.id_ciudad = c.id AND c.id_provincia = p.id`
+    try {
+        const respuesta = await newPool.query(query)
+            .then(result => { return result.rows });
+        
+        if (respuesta.length === 0) return respuesta
+            
+        return await Promise.all(respuesta.map(async(o) => {
+            o.relojes = await newPool.query("SELECT id, numero_accion, nombre, ip, puerto, marca FROM cg_relojes WHERE id_sucursal = $1",[o.id])
+                .then(result => { return result.rows })
+            return o
+        }))
+    } catch (error) {
+        console.log(error);
+        return { err: error.toString() }
+    }
+}
+
+const jsonDataEmpresa = async (database) => {
+    const newPool = Credenciales(database);
+
+    try {
+        const dataEmpresa = await EmpresaInfo(newPool); 
+        const empleados = await CountEmpleados(newPool);
+        const usuarios = await CountUsers(newPool);
+        const sucursales = await SucursalesInfo(newPool);
+        return {
+            empleados: empleados,
+            usuarios: usuarios,
+            empresa: dataEmpresa,
+            sucursales: sucursales
+        }
     } catch (error) {
         console.log(error);
         return { err: error.toString() }
@@ -112,9 +112,5 @@ const getUsersApp = async (database) => {
 module.exports = {
     tablasDatabase,
     informacionTabla,
-    getfuncionesModulos,
-    putfuncionesModulos,
-    getEmpresaInfo,
     jsonDataEmpresa,
-    getUsersApp,
 }

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
+import Grid from '@material-ui/core/Grid';
+
 import EmpresaInfo from './EmpresaInfo';
 import Empleados from './Empleados';
+import Usuarios from './Usuarios';
+import Sucursales from './Sucursales';
 
 export default function Empresa(props) {
 
     const { dataname } = props;
-    // const [empresa, setEmpresa] = useState(null);
     const [dataExtra, setdataExtra] = useState(null)
-    
+
     useEffect(() => {
-        // getEmpresaInfo();
         getDataExtraEmpresa();
         return () => {
             setdataExtra(null)
@@ -22,27 +24,14 @@ export default function Empresa(props) {
         window.api.send("Api/jsonDataEmpresa", { namedb: dataname });
         window.api.receive("jsonDataEmpresa", (data) => {
             console.log(data);
-            if (data.err) {
-                toast.error('Información Extra ' + data.err)
+            if (data.empresa.err || data.empleados.err || data.usuarios.err || data.sucursales.err) {
+                toast.error('Información Extra ' + data.empresa.err)
                 setdataExtra(null)
             } else {
                 setdataExtra(data)
             }
         });
     }
-
-    // const getEmpresaInfo = () => {
-    //     window.api.send("Api/getEmpresaInfo", { namedb: dataname });
-    //     window.api.receive("getEmpresaInfo", (data) => {
-    //         console.log(data);
-    //         if (data.err) {
-    //             toast.error('Empresa Info: ' + data.err)
-    //             setEmpresa(null)
-    //         } else {
-    //             setEmpresa(data)
-    //         }
-    //     });
-    // }
 
     const handlerError = () => {
         return (
@@ -51,12 +40,23 @@ export default function Empresa(props) {
     }
 
     const renderComponente = () => {
-        const { empleados, usuarios, empresa } = dataExtra;
-        console.log(usuarios);
+        const { empleados, usuarios, empresa, sucursales } = dataExtra;
         return (
             <>
-                <EmpresaInfo empresa={empresa} />
-                <Empleados empleado={empleados} />
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                        <EmpresaInfo empresa={empresa} />
+                    </Grid>
+                    <Grid item sx={12} sm={3}>
+                        <Empleados empleado={empleados} />
+                    </Grid>
+                    <Grid item sx={12} sm={3}>
+                        <Usuarios usuarios={usuarios} />
+                    </Grid>
+                    <Grid item sx={12} sm={12}>
+                        <Sucursales sucursales={sucursales} />
+                    </Grid>
+                </Grid>
             </>
         )
     }

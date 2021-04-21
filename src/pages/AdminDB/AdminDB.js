@@ -12,6 +12,8 @@ import TableInfo from '../../components/Table/TableInfo';
 import ActivacionApp from '../../components/Modulos/ActivacionApp';
 import ActivacionModulos from '../../components/Modulos/ActivacionModulos';
 import Empresa from '../../components/Empresa';
+import Licencia from '../../components/Licencia';
+
 import './AdminDB.scss';
 
 function TabPanel(props) {
@@ -80,10 +82,11 @@ export default function AdminDB(props) {
                     scrollButtons="auto"
                     aria-label="scrollable auto tabs example"
                 >
-                    <Tab label="Empresa" {...a11yProps(0)} />
-                    <Tab label="Modulos" {...a11yProps(1)} />
-                    <Tab label="Reloj virtual" {...a11yProps(2)} />
-                    <Tab label="Tablas" {...a11yProps(3)} />
+                    <Tab label="Licencia" {...a11yProps(0)} />
+                    <Tab label="Empresa" {...a11yProps(1)} />
+                    <Tab label="Modulos" {...a11yProps(2)} />
+                    <Tab label="Reloj virtual" {...a11yProps(3)} />
+                    <Tab label="Tablas" {...a11yProps(4)} />
                 </Tabs>
             </AppBar>
             <SwipeableViews
@@ -91,15 +94,18 @@ export default function AdminDB(props) {
                 onChangeIndex={handleChangeIndex}
             >
                 <TabPanel value={value} index={0}>
-                    <Empresa dataname={titleDBB} />
+                    <Licencia dataname={titleDBB} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <ActivacionModulos dataname={titleDBB} />
+                    <Empresa dataname={titleDBB} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <ActivacionApp dataname={titleDBB} />
+                    <ActivacionModulos dataname={titleDBB} />
                 </TabPanel>
                 <TabPanel value={value} index={3}>
+                    <ActivacionApp dataname={titleDBB} />
+                </TabPanel>
+                <TabPanel value={value} index={4}>
                     <TableInfo rows={rows} />
                 </TabPanel>
             </SwipeableViews>

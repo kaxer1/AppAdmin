@@ -3,12 +3,18 @@ const { pool } = require('./postgresql');
 const { 
     tablasDatabase,
     informacionTabla,
+    jsonDataEmpresa,
+} = require('../querys/empresa');
+
+const {
     getfuncionesModulos,
     putfuncionesModulos,
-    getEmpresaInfo,
-    jsonDataEmpresa,
-    getUsersApp 
-} = require('../querys/empresa');
+} = require('../querys/modulos')
+
+const {
+    getUsersApp,
+    putUserApp
+} = require('../querys/reloj_virtual')
 
 const listaBDD = async () => {
     const query = `select oid, datname, pg_size_pretty(pg_database_size(datname))
@@ -34,7 +40,7 @@ module.exports = {
     informacionTabla,
     getfuncionesModulos,
     putfuncionesModulos,
-    getEmpresaInfo,
     jsonDataEmpresa,
-    getUsersApp
+    getUsersApp,
+    putUserApp,
 }
