@@ -12,7 +12,6 @@ function MenuLeft(props) {
     const [activeMenu, setActiveMenu] = useState(location.pathname);
 
     const handlerMenu = (e) => {
-        console.log(e.target.attributes.href);
         setActiveMenu(e.target.attributes.href.value)
     }  
 
@@ -24,21 +23,18 @@ function MenuLeft(props) {
                 active={activeMenu === "/home" ? 'true' : 'false'} 
                 onClick={handlerMenu}>
                 <HomeIcon /> Inicio
-                {/* <p className="item-menu">Inicio</p> */}
             </Link>
             <Link to="/"
                 className="btn-menu"
                 active={activeMenu === "/" ? 'true' : 'false'} 
                 onClick={handlerMenu}>
                 <StorageIcon /> BD Postgres
-                {/* <p className="item-menu">BD Postgres</p> */}
             </Link>
             <Link to="/settings"
                 className="btn-menu"
                 active={activeMenu === "/settings" ? 'true' : 'false'} 
                 onClick={handlerMenu}>
                 <SettingsIcon /> Configuración
-                {/* <p className="item-menu">Configuración</p> */}
             </Link>
         </div>
     )

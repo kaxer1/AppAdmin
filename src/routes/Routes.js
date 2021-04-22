@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 // Pages
 import Home from "../pages/Home";
 import DataBase from "../pages/DataBase";
-import Table from "../pages/Table";
+import AdminDB from "../pages/AdminDB";
 
 export default function Routes() {
 
     const [dataTableList, setDataTableList] = useState([]);
-    const [titleDBB, settitleDBB] = useState('postgres')
+    const [titleDBB, settitleDBB] = useState(null)
 
     const handlerOpenTables = (datname) => {
         settitleDBB(datname)
-        window.api.send("ApiResquest", { funcion: "tablasDatabase", namedb: datname });
+        window.api.send("Api/tablasDatabase", { namedb: datname });
         window.api.receive("tablasDatabase", (data) => {
             setDataTableList(data)
         });
@@ -22,30 +22,40 @@ export default function Routes() {
     const [baseDatos, setBaseDatos] = useState([])
 
     useEffect(() => {
-        window.api.send("ApiResquest", {funcion: "listaBDD"});
-        window.api.receive("listaBDD", (data) => {
-            console.log(data);
-            setBaseDatos(data)
-        });
-        // window.api.send("ApiResquest", {funcion: "usuariosDataBase"});
+        ObtenerListaBDD();
+        // window.api.send("Api/usuariosDataBase");
         // window.api.receive("usuariosDataBase", (data) => {
         //     console.log(data);
         // });
+        return () => {
+            setBaseDatos([])
+        }
     }, []);
+
+    const ObtenerListaBDD = () => {
+        window.api.send("Api/listaBDD");
+        window.api.receive("listaBDD", (data) => {
+            setBaseDatos(data)
+        });
+    }
 
     return (
         <Switch>
-            <Route path="/home" exact>
-                <Home handlerOpenTables={handlerOpenTables} baseDatos={baseDatos} />
-            </Route>
             <Route path="/" exact>
                 <DataBase />
+            </Route>
+            <Route path="/home" exact>
+                {baseDatos 
+                    ? <Home handlerOpenTables={handlerOpenTables} baseDatos={baseDatos} /> 
+                    : <Redirect to="/" />}
             </Route>
             <Route path="/settings" exact>
                 <h1>Configuracion de cuenta</h1>
             </Route>
-            <Route path="/table" exact>
-                <Table dataTableList={dataTableList} titleDBB={titleDBB} />
+            <Route path="/adminDB" exact>
+                {titleDBB 
+                    ? <AdminDB dataTableList={dataTableList} titleDBB={titleDBB} /> 
+                    : <Redirect to="/home" />}
             </Route>
         </Switch>
     )

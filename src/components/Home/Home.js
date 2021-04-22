@@ -15,7 +15,7 @@ export default function Home(props) {
                 <Paper className="cards">
                     <p className="cards__titulo">{obj.datname}</p> 
                     <p className="cards__size">Tamaño {obj.pg_size_pretty} </p>
-                    <Link to="/table" className="cards__btn-link"
+                    <Link to="/adminDB" className="cards__btn-link"
                         onClick={(e) => handlerOpenTables(obj.datname)}>
                             <p className="text"> Abrir </p>
                     </Link>

@@ -1,6 +1,20 @@
 const { pool } = require('./postgresql');
-const Pool = require('pg-pool');
-const fs = require('fs');
+
+const { 
+    tablasDatabase,
+    informacionTabla,
+    jsonDataEmpresa,
+} = require('../querys/empresa');
+
+const {
+    getfuncionesModulos,
+    putfuncionesModulos,
+} = require('../querys/modulos')
+
+const {
+    getUsersApp,
+    putUserApp
+} = require('../querys/reloj_virtual')
 
 const listaBDD = async () => {
     const query = `select oid, datname, pg_size_pretty(pg_database_size(datname))
@@ -17,37 +31,16 @@ const usuariosDataBase = async () => {
     })
 }
 
-function Credenciales(database) {
-    const credenciales = fs.readFileSync('bdd.conf.json','utf8');
-    const [ obj ] = JSON.parse(credenciales)
-    obj.database = database;
-    return new Pool(obj)
-}
-
-const tablasDatabase = async(database) => {
-    
-    const newPool = Credenciales(database);
-    const query = `SELECT table_name FROM information_schema.tables 
-    WHERE table_schema=\'public\' AND table_type=\'BASE TABLE\' ORDER BY table_name`
-    return await newPool.query(query).then(result => {
-        return result.rows;
-    })
-}
-
-const informacionTabla = async(database, name_table) => {
-    
-    const newPool = Credenciales(database);
-    const query = `SELECT column_name, data_type, is_nullable 
-        FROM information_schema.columns WHERE table_name = \'${name_table}\' `
-    return await newPool.query(query).then(result => {
-        return result.rows;
-    })
-}
 
 
 module.exports = {
     listaBDD,
     usuariosDataBase,
     tablasDatabase,
-    informacionTabla
+    informacionTabla,
+    getfuncionesModulos,
+    putfuncionesModulos,
+    jsonDataEmpresa,
+    getUsersApp,
+    putUserApp,
 }
