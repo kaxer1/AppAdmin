@@ -16,13 +16,6 @@ export default function ActivacionModulos(props) {
     const [modulos, setModulos] = useState(null)
 
     useEffect(() => {
-        getfuncionesModulos()
-        return () => {
-            setModulos(null)
-        }
-    }, [])
-
-    const getfuncionesModulos = () => {
         window.api.send("Api/getfuncionesModulos", { namedb: dataname });
         window.api.receive("getfuncionesModulos", (data) => {
             console.log(data);
@@ -33,7 +26,10 @@ export default function ActivacionModulos(props) {
                 setModulos(data)
             }
         });
-    }
+        return () => {
+            setModulos(null)
+        }
+    }, [dataname])
 
     const handleChange = (event) => {
         setModulos({ ...modulos, [event.target.name]: event.target.checked });

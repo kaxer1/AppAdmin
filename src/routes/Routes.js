@@ -5,6 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from "../pages/Home";
 import DataBase from "../pages/DataBase";
 import AdminDB from "../pages/AdminDB";
+import LicenciasAdmin from "../pages/LicenciasAdmin";
 
 export default function Routes() {
 
@@ -56,6 +57,9 @@ export default function Routes() {
                 {titleDBB 
                     ? <AdminDB dataTableList={dataTableList} titleDBB={titleDBB} /> 
                     : <Redirect to="/home" />}
+            </Route>
+            <Route path="/licencias-admin" exact>
+                <LicenciasAdmin baseDatos={baseDatos} />
             </Route>
         </Switch>
     )

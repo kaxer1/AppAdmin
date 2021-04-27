@@ -29,13 +29,6 @@ export default function ActivacionApp(props) {
     const [rows, setUserEmploys] = useState([]);
 
     useEffect(() => {
-        getUsersApp();
-        return () => {
-            setUserEmploys([])
-        }
-    }, [])
-
-    const getUsersApp = () => {
         window.api.send("Api/getUsersApp", { namedb: dataname });
         window.api.receive("getUsersApp", (data) => {
             console.log(data);
@@ -46,7 +39,10 @@ export default function ActivacionApp(props) {
                 setUserEmploys(data)
             }
         });
-    }
+        return () => {
+            setUserEmploys([])
+        }
+    }, [dataname])
 
     /***************************************************************************************/
     const [page, setPage] = useState(0);
@@ -160,7 +156,7 @@ export default function ActivacionApp(props) {
                     <TableRow>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={3}
+                            colSpan={12}
                             count={rows.length}
                             rowsPerPage={rowsPerPage}
                             page={page}

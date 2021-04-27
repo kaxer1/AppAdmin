@@ -5,13 +5,23 @@ import Button from '@material-ui/core/Button';
 import StorageIcon from '@material-ui/icons/Storage';
 import ClearIcon from '@material-ui/icons/Clear';
 import ConnectForm from '../../components/ConnectForm';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from "@material-ui/core/styles";
 
 import './DataBase.scss';
+
+const useStyles = makeStyles(() => ({
+    titulo: {
+        padding: '15px 0px',
+        fontSize: '25px'
+    },
+}));
 
 export default function DataBase() {
 
     const [activeForm, setActiveForm] = useState(false);
-    const [dataConnect, setdataConnect] = useState([])
+    const [dataConnect, setdataConnect] = useState([]);
+    const classes = useStyles();
 
     useEffect(() => {
         window.api.send("fileConf/read_update");
@@ -26,6 +36,7 @@ export default function DataBase() {
     };
 
     const handlerSaveConnect = (data) => {
+        console.log(data);
         window.api.send("fileConf/update", { data: JSON.stringify([data]) });
         window.api.receive("update", (data) => {
             console.log(data);
@@ -52,7 +63,9 @@ export default function DataBase() {
     })
     return (
         <>
-            <p className="title"> Conectate al SGBD Postgresql </p>
+            <Typography className={classes.titulo} variant="h4" align="center" component="h5">
+                Conectate al SGBD Postgresql
+            </Typography>
             {renderData}
             <div className="btn-group">
                 <Button 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -24,6 +24,9 @@ const useRowStyles = makeStyles({
             borderBottom: 'unset',
         },
     },
+    keys: {
+        fontSize: '15px',
+    }
 });
 
 function Row(props) {
@@ -40,52 +43,32 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.provincia}
+                    {row.name_database}
                 </TableCell>
                 <TableCell component="th" scope="row" align="left">
-                    {row.ciudad}
+                    {row.empresa}
                 </TableCell>
                 <TableCell component="th" scope="row" align="left">
-                    {row.sucursal}
+                    {row.fec_activacion}
+                </TableCell>
+                <TableCell component="th" scope="row" align="left">
+                    {row.fec_desactivacion}
                 </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        {row.relojes.length === 0
-                            ?
+                        {
                             <Box margin={1}>
-                                <Typography variant="h6" gutterBottom component="div">
-                                    No hay relojes registrados
+                                <Typography variant="h6" align="center" gutterBottom component="h5">
+                                    Keys
                                 </Typography>
-                            </Box>
-                            : 
-                            <Box margin={1}>
-                                <Typography variant="h6" gutterBottom component="div">
-                                    Relojes
+                                <Typography className={classes.keys} variant="h6" component="h5">
+                                    Public Keys: {row.public_key}
                                 </Typography>
-                                <Table size="small" aria-label="purchases">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Nombre</TableCell>
-                                            <TableCell>IP</TableCell>
-                                            <TableCell>Puerto</TableCell>
-                                            <TableCell>Marca</TableCell>
-                                            <TableCell>Acciones</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {row.relojes.map((relojesRow) => (
-                                            <TableRow key={relojesRow.id}>
-                                                <TableCell component="th" scope="row"> {relojesRow.nombre} </TableCell>
-                                                <TableCell>{relojesRow.ip}</TableCell>
-                                                <TableCell>{relojesRow.puerto}</TableCell>
-                                                <TableCell>{relojesRow.marca}</TableCell>
-                                                <TableCell>{relojesRow.numero_accion}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                <Typography className={classes.keys} variant="h6" component="h5">
+                                    Private Keys: {row.private_key}
+                                </Typography>
                             </Box>
                         }
                     </Collapse>
@@ -95,8 +78,9 @@ function Row(props) {
     );
 }
 
-export default function Sucursales(props) {
-    const { sucursales: rows } = props;
+export default function LicenciaTable(props) {
+
+    const { licencias: rows } = props
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -111,19 +95,20 @@ export default function Sucursales(props) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    console.log(rows);
+
     return (
         <>
-            <Typography variant="h6" gutterBottom component="div">
-                Información Sucursales
-            </Typography>
             <TableContainer component={Paper} elevation={3}>
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow>
                             <TableCell />
-                            <TableCell>Provincia</TableCell>
-                            <TableCell align="left">Ciudad</TableCell>
-                            <TableCell align="left">Sucursal</TableCell>
+                            <TableCell>Nombre BDD</TableCell>
+                            <TableCell align="left">Empresa</TableCell>
+                            <TableCell align="left">Fecha Activación</TableCell>
+                            <TableCell align="left">Fecha Desactivación</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -131,7 +116,7 @@ export default function Sucursales(props) {
                             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             : rows
                         ).map((row) => (
-                            <Row key={row.sucursal} row={row} />
+                            <Row key={row.id} row={row} />
                         ))}
 
                         {emptyRows > 0 && (

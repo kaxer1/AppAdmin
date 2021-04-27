@@ -46,10 +46,9 @@ ipcMain.on("fileConf/read_update", async (event, args) => {
 });
 
 ipcMain.on("fileConf/update", async (event, args) => {
-  console.log(args);
-  fs.writeFile('bdd.conf.json', args, function (err) {
+  fs.writeFile('bdd.conf.json', args.data, function (err) {
     if (err) throw err;
-    mainWindow.webContents.send("update", data);
+    mainWindow.webContents.send("update", args.data );
     console.log('******************************', 'Archivo  actualizado!', '******************************');
   })
 
@@ -105,6 +104,24 @@ ipcMain.on("Api/jsonDataEmpresa", async (event, args) => {
 ipcMain.on("Api/putUserApp", async (event, args) => {
   let response = await consultas.putUserApp(args.namedb, args.data);
   mainWindow.webContents.send("putUserApp", response);
+});
+
+ipcMain.on("Api/getLicencias", async (event, args) => {
+  console.log(args);
+  let response = await consultas.getLicencias();
+  mainWindow.webContents.send("getLicencias", response);
+});
+
+ipcMain.on("Api/obtenerLicencia", async (event, args) => {
+  console.log(args);
+  let response = await consultas.obtenerLicencia(args.namedb);
+  mainWindow.webContents.send("obtenerLicencia", response);
+});
+
+ipcMain.on("Api/createLicencia", async (event, args) => {
+  console.log(args);
+  let response = await consultas.createLicencia(args.data);
+  mainWindow.webContents.send("createLicencia", response);
 });
 
 // ipcMain.on("Api/", async (event, args) => {

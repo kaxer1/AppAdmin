@@ -14,13 +14,6 @@ export default function Empresa(props) {
     const [dataExtra, setdataExtra] = useState(null)
 
     useEffect(() => {
-        getDataExtraEmpresa();
-        return () => {
-            setdataExtra(null)
-        }
-    }, [])
-
-    const getDataExtraEmpresa = () => {
         window.api.send("Api/jsonDataEmpresa", { namedb: dataname });
         window.api.receive("jsonDataEmpresa", (data) => {
             console.log(data);
@@ -31,7 +24,10 @@ export default function Empresa(props) {
                 setdataExtra(data)
             }
         });
-    }
+        return () => {
+            setdataExtra(null)
+        }
+    }, [dataname])
 
     const handlerError = () => {
         return (

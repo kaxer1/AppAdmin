@@ -8,13 +8,36 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        minHeight: '100vh',
+        "&:first-of-type": {
+            height: '95vh'
+        },
+
+        "&:last-of-type": {
+            height: '5vh'
+        }
+    },
+    rootContent: {
+        minHeight: '90vh',
+        "&:first-of-type": {
+            height: '5vh'
+        },
+
+        "&:last-of-type": {
+            height: '85vh',
+        },
+    },
     menu: {
         width: '250px',
     },
     sub_content: {
-        padding: '0px 20px',
-        height: '90%',
-        backgroundColor: '#f3f3f3',
+        padding: '0px 20px 20px 20px',
+        marginTop: '15px',
+        backgroundColor: '#f3f3f3'
+    },
+    foother: {
+        backgroundColor: theme.palette.background.default,
     }
 }));
 
@@ -24,15 +47,18 @@ export default function LoggedLayout(props) {
 
     return (
         <Router>
-            <Grid container spacing={0}>
+            <Grid className={classes.root} container spacing={0}>
                 <Grid item xs={4} sm={3} md={3} lg={2}>
                     <MenuLeft user={user} />
                 </Grid>
-                <Grid item xs={8} sm={9} md={9} lg={10}>
+                <Grid className={classes.rootContent} item xs={8} sm={9} md={9} lg={10}>
                     <TopBar logOut={logOut} />
                     <div className={classes.sub_content}>
                         <Routes />
                     </div>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={12} className={classes.foother}>
+                    <h4>Foother</h4>
                 </Grid>
             </Grid>
         </Router>

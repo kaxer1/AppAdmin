@@ -6,13 +6,14 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
 import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
 import AppBar from '@material-ui/core/AppBar';
 
 import TableInfo from '../../components/Table/TableInfo';
 import ActivacionApp from '../../components/Modulos/ActivacionApp';
 import ActivacionModulos from '../../components/Modulos/ActivacionModulos';
 import Empresa from '../../components/Empresa';
-import Licencia from '../../components/Licencia';
+import Licencia from '../../components/Licencia/LicenciaInfo';
 
 import './AdminDB.scss';
 
@@ -20,19 +21,21 @@ function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
     return (
-        <div className="admin_page"
-            role="tabpanel"
-            hidden={value !== index}
-            id={`scrollable-auto-tabpanel-${index}`}
-            aria-labelledby={`scrollable-auto-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box className="admin_page__content">
-                    {children}
-                </Box>
-            )}
-        </div>
+        <Paper elevation={3} >
+            <div className="admin_page"
+                role="tabpanel"
+                hidden={value !== index}
+                id={`scrollable-auto-tabpanel-${index}`}
+                aria-labelledby={`scrollable-auto-tab-${index}`}
+                {...other}
+            >
+                {value === index && (
+                    <Box className="admin_page__content">
+                        {children}
+                    </Box>
+                )}
+            </div>
+        </Paper>
     );
 }
 

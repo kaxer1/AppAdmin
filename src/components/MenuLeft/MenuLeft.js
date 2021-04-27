@@ -4,6 +4,8 @@ import logoAdmin from '../../assets/png/logoAdmin.png';
 import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import StorageIcon from '@material-ui/icons/Storage';
+import PublicIcon from '@material-ui/icons/Public';
+
 import './MenuLeft.scss';
 
 function MenuLeft(props) {
@@ -29,6 +31,12 @@ function MenuLeft(props) {
                 active={activeMenu === "/" ? 'true' : 'false'} 
                 onClick={handlerMenu}>
                 <StorageIcon /> BD Postgres
+            </Link>
+            <Link to="/licencias-admin"
+                className="btn-menu"
+                active={activeMenu === "/licencias-admin" ? 'true' : 'false'} 
+                onClick={handlerMenu}>
+                <PublicIcon /> Licencias
             </Link>
             <Link to="/settings"
                 className="btn-menu"

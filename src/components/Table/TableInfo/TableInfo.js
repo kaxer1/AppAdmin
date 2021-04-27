@@ -74,7 +74,7 @@ export default function TableInfo(props) {
                     <TableRow>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                            colSpan={3}
+                            colSpan={12}
                             count={rows.length}
                             rowsPerPage={rowsPerPage}
                             page={page}

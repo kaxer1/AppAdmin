@@ -9,16 +9,22 @@ const {
 const {
     getfuncionesModulos,
     putfuncionesModulos,
-} = require('../querys/modulos')
+} = require('../querys/modulos');
 
 const {
     getUsersApp,
     putUserApp
-} = require('../querys/reloj_virtual')
+} = require('../querys/reloj_virtual');
+
+const {
+    getLicencias,
+    createLicencia,
+    obtenerLicencia
+} = require('../querys/licencias');
 
 const listaBDD = async () => {
     const query = `select oid, datname, pg_size_pretty(pg_database_size(datname))
-    from pg_database where datname not in (\'postgres\', \'template1\', \'template0\')
+    from pg_database where datname not in (\'postgres\', \'template1\', \'template0\', \'licencias\')
 	order by pg_database_size(datname) desc`
     return await pool.query(query).then(result => {
         return result.rows;
@@ -43,4 +49,7 @@ module.exports = {
     jsonDataEmpresa,
     getUsersApp,
     putUserApp,
+    getLicencias,
+    obtenerLicencia,
+    createLicencia
 }
