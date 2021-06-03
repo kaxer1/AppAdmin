@@ -5,6 +5,7 @@ const {createWindow} = require('./main');
 contextIsolation = true;
 // app.whenReady().then(createWindow)
 
+// app.commandLine.appendSwitch('node', '--max-old-space-size=8192');
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {

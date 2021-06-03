@@ -29,11 +29,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LicenciasAdmin(props) {
     const classes = useStyles();
-    const { baseDatos: list} = props;
+    const { baseDatos: list } = props;
 
     const [licencias, setLicencias] = useState([]);
     useEffect(() => {
-
         window.api.send("Api/getLicencias");
         window.api.receive("getLicencias", (data) => {
             console.log(data);

@@ -29,7 +29,40 @@ const putfuncionesModulos = async (database, data) => {
     }
 }
 
+const getAccessWebEmploy = async (database) => {
+    const newPool = Credenciales(database);
+    try {
+        const [ result ] = await newPool.query("SELECT web_access FROM empleados LIMIT 1")
+            .then(result => { return result.rows; })
+        console.log(result);
+        if (result) return result
+        return { error: "Error al obtener campo web_access" }
+    } catch (error) {
+        console.log(error);
+        return { err: error.toString() }
+    }
+}
+
+const putAccessWebEmploy = async (database, data) => {
+    const newPool = Credenciales(database);
+    const { web_access } = data;
+    try {
+        const result = await newPool.query(
+            "UPDATE empleados SET web_access = $1 ",
+            [web_access])
+            .then(result => { return result.command ; })
+        console.log(result);
+        if (result === 'UPDATE') return {web_access: web_access}
+        return { error: "Erro en la actualizacion de Acceso a la aplicaicon web" }
+    } catch (error) {
+        console.log(error);
+        return { err: error.toString() }
+    }
+}
+
 module.exports = {
     getfuncionesModulos,
-    putfuncionesModulos
+    putfuncionesModulos,
+    getAccessWebEmploy,
+    putAccessWebEmploy
 }

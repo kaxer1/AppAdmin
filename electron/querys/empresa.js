@@ -109,8 +109,21 @@ const jsonDataEmpresa = async (database) => {
     }
 }
 
+const putlicenciaEmpresa = async (database, public_key) => {
+    const newPool = Credenciales(database);
+    try {
+        const [result] = await newPool.query("UPDATE cg_empresa SET public_key = $1 RETURNING public_key",[public_key]).then(result => { return result.rows; })
+        if (result) return result
+        return { error: "No hay registros en la tabla cg_empresa" }
+    } catch (error) {
+        console.log(error);
+        return { err: error.toString() }
+    }
+}
+
 module.exports = {
     tablasDatabase,
     informacionTabla,
     jsonDataEmpresa,
+    putlicenciaEmpresa
 }

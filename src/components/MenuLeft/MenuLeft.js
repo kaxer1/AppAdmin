@@ -5,6 +5,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import StorageIcon from '@material-ui/icons/Storage';
 import PublicIcon from '@material-ui/icons/Public';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
+import BackupIcon from '@material-ui/icons/Backup';
 
 import './MenuLeft.scss';
 
@@ -37,6 +39,18 @@ function MenuLeft(props) {
                 active={activeMenu === "/licencias-admin" ? 'true' : 'false'} 
                 onClick={handlerMenu}>
                 <PublicIcon /> Licencias
+            </Link>
+            <Link to="/migracion"
+                className="btn-menu"
+                active={activeMenu === "/migracion" ? 'true' : 'false'} 
+                onClick={handlerMenu}>
+                <ImportExportIcon /> Migración
+            </Link>
+            <Link to="/upload"
+                className="btn-menu"
+                active={activeMenu === "/upload" ? 'true' : 'false'} 
+                onClick={handlerMenu}>
+                <BackupIcon /> Upload
             </Link>
             <Link to="/settings"
                 className="btn-menu"

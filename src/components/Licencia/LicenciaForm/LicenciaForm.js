@@ -107,13 +107,30 @@ export default function LicenciaForm(props) {
                     setBtnDisable(false)
                     setSelectList("")
                     toast.success('Licencia creada existosamente')
+                    conexionApi(data)
                 } else {
                     toast.error('Error en la creacion')
+                    setBtnDisable(false)
                 }
             });
             console.log('form de licencia correcto');
         } 
         e.preventDefault()
+    }
+
+    const conexionApi = (responseData) => {
+        
+        const credenciales = { user: "kevin", password: "1234adminApp"};
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', "authorization": JSON.stringify(credenciales) },
+            body: JSON.stringify(responseData)            
+        };
+        fetch('http://localhost:3001/licencias/createFile', requestOptions)
+            .then(response => response.json())
+            .then(data => toast.dark(data.message))
+            .catch(err => toast.error(err.message));
     }
 
     return (
@@ -137,17 +154,6 @@ export default function LicenciaForm(props) {
                         </MenuItem>
                     ))}
                 </TextField>
-                <TextField
-                    name="empresa"
-                    error={formError.empresa}
-                    onKeyPress={SoloLetras}
-                    helperText={errorMessage.empresa}
-                    value={formData.empresa}
-                    id="outlined-helperText"
-                    label="Nombre Empresa"
-                    variant="outlined"
-                    required
-                />
                 <TextField
                     name="fec_activacion"
                     error={formError.fec_activacion}
@@ -174,6 +180,17 @@ export default function LicenciaForm(props) {
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    required
+                />
+                <TextField
+                    name="empresa"
+                    error={formError.empresa}
+                    onKeyPress={SoloLetras}
+                    helperText={errorMessage.empresa}
+                    value={formData.empresa}
+                    id="outlined-helperText"
+                    label="Nombre Empresa"
+                    variant="outlined"
                     required
                 />
                 <Button className={classes.btn} type="Submit" variant="contained" color="primary" disabled={!btnDisable}>

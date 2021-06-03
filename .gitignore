@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+bdd.conf.json
+block.conf.json
+
+/.VSCodeCounter

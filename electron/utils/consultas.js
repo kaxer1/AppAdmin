@@ -4,11 +4,14 @@ const {
     tablasDatabase,
     informacionTabla,
     jsonDataEmpresa,
+    putlicenciaEmpresa
 } = require('../querys/empresa');
 
 const {
     getfuncionesModulos,
     putfuncionesModulos,
+    getAccessWebEmploy,
+    putAccessWebEmploy
 } = require('../querys/modulos');
 
 const {
@@ -21,6 +24,10 @@ const {
     createLicencia,
     obtenerLicencia
 } = require('../querys/licencias');
+
+const {
+    fileUpload
+} = require('../querys/uploads');
 
 const listaBDD = async () => {
     const query = `select oid, datname, pg_size_pretty(pg_database_size(datname))
@@ -51,5 +58,9 @@ module.exports = {
     putUserApp,
     getLicencias,
     obtenerLicencia,
-    createLicencia
+    createLicencia,
+    putlicenciaEmpresa,
+    getAccessWebEmploy,
+    putAccessWebEmploy,
+    fileUpload
 }

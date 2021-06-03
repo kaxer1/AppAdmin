@@ -6,6 +6,8 @@ import Home from "../pages/Home";
 import DataBase from "../pages/DataBase";
 import AdminDB from "../pages/AdminDB";
 import LicenciasAdmin from "../pages/LicenciasAdmin";
+import Migracion from "../pages/Migracion";
+import UploadExcel from "../pages/UploadExcel";
 
 export default function Routes() {
 
@@ -60,6 +62,12 @@ export default function Routes() {
             </Route>
             <Route path="/licencias-admin" exact>
                 <LicenciasAdmin baseDatos={baseDatos} />
+            </Route>
+            <Route path="/migracion" exact>
+                <Migracion baseDatos={baseDatos} />
+            </Route>
+            <Route path="/upload" exact>
+                <UploadExcel />
             </Route>
         </Switch>
     )
