@@ -1,1 +1,1 @@
-[{"database":"eep","host":"localhost","password":"fulltime","port":5432,"user":"postgres"}]
+[{"database":"fulltimeTimbres","host":"192.168.0.103","password":"fulltime","port":5432,"user":"postgres"}]

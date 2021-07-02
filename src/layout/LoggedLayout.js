@@ -6,6 +6,7 @@ import TopBar from '../components/TopBar';
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +38,13 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#f3f3f3'
     },
     foother: {
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: '#006DB6',
+        color: '#FFFFFF'
+    },
+    itemFoother: {
+        marginTop: '20px',
+        marginLeft: '10px',
+        fontSize: '15px'
     }
 }));
 
@@ -58,7 +65,9 @@ export default function LoggedLayout(props) {
                     </div>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} lg={12} className={classes.foother}>
-                    <h4>Foother</h4>
+                    <Typography className={classes.itemFoother} align="left" variant="h5" >
+                        Desarrollado por Casa Pazmiño
+                    </Typography>
                 </Grid>
             </Grid>
         </Router>

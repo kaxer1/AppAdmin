@@ -67,9 +67,9 @@ export default function ActivacionApp(props) {
     }
     const closeDialogApp = (value) => {
         if (value !== null) {
-            setOpen(false);
             handlerSave(value)
         }
+        setOpen(false);
         setUserSelectChange(null)
     };
     /***************************************************************************************/
@@ -113,7 +113,7 @@ export default function ActivacionApp(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {(rowsPerPage > 0
+                    { (rowsPerPage > 0
                         ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         : rows
                     ).map((row) => (

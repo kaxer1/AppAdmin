@@ -14,11 +14,11 @@ const getfuncionesModulos = async (database) => {
 
 const putfuncionesModulos = async (database, data) => {
     const newPool = Credenciales(database);
-    const { id, hora_extra, accion_personal, alimentacion, permisos } = data;
+    const { id, hora_extra, accion_personal, alimentacion, permisos, reportes } = data;
     try {
         const [result] = await newPool.query(
-            "UPDATE funciones SET hora_extra = $2, accion_personal = $3, alimentacion = $4, permisos = $5 WHERE id = $1 RETURNING *",
-            [id, hora_extra, accion_personal, alimentacion, permisos])
+            "UPDATE funciones SET hora_extra = $2, accion_personal = $3, alimentacion = $4, permisos = $5, reportes = $6 WHERE id = $1 RETURNING *",
+            [id, hora_extra, accion_personal, alimentacion, permisos, reportes])
             .then(result => { return result.rows; })
 
         if (result) return result

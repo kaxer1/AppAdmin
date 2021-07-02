@@ -16,13 +16,6 @@ const useStyles = makeStyles({
         color: '#22a0ff',
         fontSize: '25px'
     },
-    // subtitle: {
-    //     color: '#464646',
-    //     fontSize: '18px'
-    // },
-    // btn: {
-    //     margin: '10px 35%'
-    // }
 });
 
 export default function ActivacionModulos(props) {

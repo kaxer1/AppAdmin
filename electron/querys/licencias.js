@@ -1,4 +1,4 @@
-const { Credenciales } = require('../utils/credenciales');
+const { Credenciales, CredencialesBDDLicencias } = require('../utils/credenciales');
 const SHA256 = require('crypto-js/sha256');
 const fs = require("fs");
 
@@ -102,7 +102,7 @@ class Blockchain {
 const blockchain = new Blockchain();
 
 const getLicencias = async () => {
-    const newPool = Credenciales('licencias');
+    const newPool = CredencialesBDDLicencias();
     try {
         const response = await newPool.query('SELECT id, name_database, empresa, public_key, private_key, CAST(fec_activacion AS VARCHAR), CAST(fec_desactivacion AS VARCHAR) FROM licenciasAdmin')
             .then(result => { return result.rows.map(o => {
@@ -118,7 +118,7 @@ const getLicencias = async () => {
 }
 
 const obtenerLicencia = async (name_database) => {
-    const newPool = Credenciales('licencias');
+    const newPool = CredencialesBDDLicencias('licencias');
     const newPoolClient = Credenciales(name_database);
     try {
         const [ admin ] = await newPool.query('SELECT name_database, empresa, public_key, private_key, CAST(fec_activacion AS VARCHAR), CAST(fec_desactivacion AS VARCHAR) FROM licenciasAdmin WHERE name_database = $1',
@@ -138,7 +138,7 @@ const obtenerLicencia = async (name_database) => {
 }
 
 const createLicencia = async(data) => {
-    const newPool = Credenciales('licencias');
+    const newPool = CredencialesBDDLicencias('licencias');
 
     const { name_database, empresa, fec_activacion, fec_desactivacion } = data;
     const public_key = SHA256( name_database, empresa, fec_activacion, fec_desactivacion ).toString()

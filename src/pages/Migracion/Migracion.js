@@ -4,6 +4,8 @@ import FormFulltime27 from '../../components/Migracion/FormFulltime2_7';
 import FormFulltime3 from '../../components/Migracion/FormFulltime3';
 import ConexionFT3FT27 from '../../components/Migracion/ConexionFT3_FT27';
 import ExpDataFlex from '../../components/Migracion/ExpDataFlex';
+import DialogFulltime27 from '../../components/Dialog/DialogFulltime2_7'
+import DialogDataflex from '../../components/Dialog/DialogDataflex'
 
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -82,10 +84,17 @@ export default function Migracion(props) {
     const renderAtrasBtn = (
         <>
             <Typography className={classes.titulo} variant="h4" align="left" component="h5">
-                <Button className={classes.btn} variant="contained" color="primary" startIcon={<ArrowBackIcon />} onClick={atrasMetodo} >
+                <Button 
+                    className={classes.btn}
+                    variant="contained" 
+                    color="primary" 
+                    startIcon={<ArrowBackIcon />} 
+                    onClick={atrasMetodo} >
                     Atrás
                 </Button>
                 { titleSelect }
+                { activeUno && <DialogFulltime27 /> }
+                { activeDos && <DialogDataflex /> }
             </Typography>
         </>
     )
@@ -147,14 +156,8 @@ export default function Migracion(props) {
                                 
                             }) }
                         </Grid>
-                        {/* <FormFulltime27 baseDatos={baseDatos} setOptionsQueryFT2_7={setOptionsQueryFT2_7} optionsQueryFT2_7={optionsQueryFT2_7} /> */}
                     </Paper>
                 </Grid>
-                {/* <Grid item xs={12}>
-                    { (optionsQueryFT2_7.user && optionsQueryFT3.user) 
-                        && <ConexionFT3FT27 fulltime3={optionsQueryFT3} fulltime2_7={optionsQueryFT2_7} /> 
-                    }
-                </Grid> */}
             </Grid>
         </>
     )

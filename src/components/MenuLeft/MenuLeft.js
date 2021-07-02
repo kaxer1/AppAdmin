@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, withRouter } from "react-router-dom";
 import logoAdmin from '../../assets/png/logoAdmin.png';
 import HomeIcon from '@material-ui/icons/Home';
-import SettingsIcon from '@material-ui/icons/Settings';
 import StorageIcon from '@material-ui/icons/Storage';
 import PublicIcon from '@material-ui/icons/Public';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
@@ -51,12 +50,6 @@ function MenuLeft(props) {
                 active={activeMenu === "/upload" ? 'true' : 'false'} 
                 onClick={handlerMenu}>
                 <BackupIcon /> Upload
-            </Link>
-            <Link to="/settings"
-                className="btn-menu"
-                active={activeMenu === "/settings" ? 'true' : 'false'} 
-                onClick={handlerMenu}>
-                <SettingsIcon /> Configuración
             </Link>
         </div>
     )

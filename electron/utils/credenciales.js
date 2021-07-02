@@ -8,6 +8,20 @@ function Credenciales(database) {
     return new Pool(obj)
 }
 
+function CredencialesBDDLicencias() {
+
+    const obj = {
+        user: 'postgres',
+        host: 'localhost',
+        port: 5432,
+        password: 'fulltime',
+        database: 'licencias',
+    }
+
+    return new Pool(obj)
+}
+
 module.exports = {
-    Credenciales
+    Credenciales,
+    CredencialesBDDLicencias
 }
